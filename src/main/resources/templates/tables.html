@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form  method="get" action="">
+Таблица:<select name="table">
+    <option value="Customer">Customer</option>
+    <option value="DeliveryProcess">DeliveryProcess</option>
+    <option value="Lens">Lens</option>
+    <option value="Material">Material</option>
+    <option value="OrderForObj">OrderForObj</option>
+    <option value="Workplace">Workplace</option>
+    <option value="Worker">Worker</option>
+    <option value="Tools">Tools</option>
+    <option value="WorkShift">WorkShift</option>
+</select>
+    id:<input type="number" name="id" placeholder="id">
+    <input type="submit" value="найти">
+</form>
+<h th:text="${ans}"></h>
+<form action="#cust">
+    <button>Клиенты</button>
+</form>
+<form action="#p">
+    <button>Процесс доставки</button>
+</form>
+<form action="#l">
+    <button>Модели объективов</button>
+</form>
+<form action="#m">
+    <button>Материалы</button>
+</form>
+<form action="#o">
+    <button>Заказы</button>
+</form>
+<form action="#s">
+    <button>Сотрудники</button>
+</form>
+<form action="#rm">
+    <button>Рабочие места</button>
+</form>
+<form action="#t">
+    <button>Инструменты</button>
+</form>
+</form>
+<form action="#rs">
+    <button>Рабочие смены</button>
+</form>
+<br>
+<h1><a id="cust">Клиенты</a></h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Имя</th>
+    <th>Фамилия-</th>
+    <th>Телефон</th>
+    <th>email</th>
+    <th>Адрес</th>
+    </thead>
+    <div th:each="customer : ${Customers}">
+        <tr>
+            <td th:text="${customer.id}"></td>
+            <td th:text="${customer.name}"></td>
+            <td th:text="${customer.surname}"></td>
+            <td th:text="${customer.phone}"></td>
+            <td th:text="${customer.email}"></td>
+            <td th:text="${customer.address}"></td>
+        </tr>
+    </div>
+</table>
+
+
+<h1><a id="p"> Процесс доставки </a> </h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Пункт назначения</th>
+    <th>Пункт отбытия</th>
+    <th>Время прибытия</th>
+    <th>Время отбытия</th>
+    </thead>
+    <div th:each="dp : ${DeliveryProcess}">
+        <tr>
+            <td th:text="${dp.id}"></td>
+            <td th:text="${dp.destination}"></td>
+            <td th:text="${dp.departureTime}"></td>
+            <td th:text="${dp.addressDeparture}"></td>
+            <td th:text="${dp.arrivalTime}"></td>
+        </tr>
+    </div>
+</table>
+
+
+<h1><a id="l">Модели объективов</a> </h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Диафрагма</th>
+    <th>Байонет</th>
+    <th>Корпус</th>
+    <th>Процессор</th>
+    <th>Линза</th>
+    <th>Зеркало</th>
+    </thead>
+    <div th:each="l : ${Lens}">
+        <tr>
+            <td th:text="${l.id}"></td>
+            <td th:text="${l.diaphragm}"></td>
+            <td th:text="${l.bayonet}"></td>
+            <td th:text="${l.barrel}"></td>
+            <td th:text="${l.processor}"></td>
+            <td th:text="${l.objectiveLens}"></td>
+            <td th:text="${l.mirror}"></td>
+        </tr>
+    </div>
+</table>
+
+<h1><a id="m"></a> Материалы</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>id доставки</th>
+    <th>Тип</th>
+    <th>Количество</th>
+    <th>Цена</th>
+    <th>Поставщик</th>
+    </thead>
+    <div th:each="m : ${Material}">
+        <tr>
+            <td th:text="${m.id}"></td>
+            <td th:text="${m.delivery.id}"></td>
+            <td th:text="${m.type}"></td>
+            <td th:text="${m.count}"></td>
+            <td th:text="${m.price}"></td>
+            <td th:text="${m.provider}"></td>
+        </tr>
+    </div>
+</table>
+
+<h1><a id="o"></a> Заказы</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>id клиента</th>
+    <th>id модели объектива</th>
+    <th>id доставки</th>
+    <th>Дата создания</th>
+    <th>Цена</th>
+    <th>Количество</th>
+    </thead>
+    <div th:each="order : ${OrderForObj}">
+        <tr>
+            <td th:text="${order.id}"></td>
+            <td th:text="${order.customer.id}"></td>
+            <td th:text="${order.lens.id}"></td>
+            <td th:text="${order.delivery.id}"></td>
+            <td th:text="${order.dateOfAppeal}"></td>
+            <td th:text="${order.price}"></td>
+            <td th:text="${order.count}"></td>
+        </tr>
+    </div>
+</table>
+
+<h1><a id="s"></a> Сотрудники</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Рабочая смена</th>
+    <th>Рабочее место</th>
+    <th>Имя</th>
+    <th>Фамилия</th>
+    <th>Должность</th>
+    <th>Телефон</th>
+    <th>Зарплата</th>
+    </thead>
+    <div th:each="w : ${Worker}">
+        <tr>
+            <td th:text="${w.id}"></td>
+            <td th:text="${w.workShift.id}"></td>
+            <td th:text="${w.workplace.id}"></td>
+            <td th:text="${w.name}"></td>
+            <td th:text="${w.surname}"></td>
+            <td th:text="${w.post}"></td>
+            <td th:text="${w.phone}"></td>
+            <td th:text="${w.salary}"></td>
+        </tr>
+    </div>
+</table>
+
+<h1><a id="rm"></a>Рабочие места</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Зона</th>
+    <th>Тип</th>
+    </thead>
+    <div th:each="wp : ${Workplace}">
+        <tr>
+            <td th:text="${wp.id}"></td>
+            <td th:text="${wp.zone}"></td>
+            <td th:text="${wp.type}"></td>
+        </tr>
+    </div>
+</table>
+
+
+<h1><a id="t"></a>Инструменты</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Рабочее место</th>
+    <th>Тип</th>
+    </thead>
+    <div th:each="t : ${Tools}">
+        <tr>
+            <td th:text="${t.id}"></td>
+            <td th:text="${t.workplace.id}"></td>
+            <td th:text="${t.type}"></td>
+        </tr>
+    </div>
+</table>
+
+<h1><a id="rs"></a>Рабочие смены</h1>
+<table border="1" bordercolor=black>
+    <thead>
+    <th>id</th>
+    <th>Начало</th>
+    <th>Конец</th>
+    </thead>
+    <div th:each="ws : ${WorkShift}">
+        <tr>
+            <td th:text="${ws.id}"></td>
+            <td th:text="${ws.start}"></td>
+            <td th:text="${ws.end}"></td>
+        </tr>
+    </div>
+</table>
+</body>
+</html>
