@@ -17,9 +17,32 @@
     <option value="Tools">Tools</option>
     <option value="WorkShift">WorkShift</option>
 </select>
+    Действие:<select name="action">
+    <option value="sel">Получить</option>
+    <option value="del">Удалить</option>
+    <option value="add">Вставить</option>
+    <option value="upd">Обновить</option>
+</select>
+
     id:<input type="number" name="id" placeholder="id">
     <input type="submit" value="найти">
 </form>
+<form method="post" action="">
+<table border="1" bordercolor=black>
+    <thead>
+    <div th:each="f : ${fields}">
+    <th th:text="${f.getName()}"></th>
+    </div>
+    </thead>
+        <tr>
+            <div th:each="f : ${fields}">
+            <td><input type="text" th:name="${f.getName()}"> </td>
+            </div>
+        </tr>
+</table>
+    <input type="submit" value="Обновить">
+</form>
+
 <h th:text="${ans}"></h>
 <form action="#cust">
     <button>Клиенты</button>

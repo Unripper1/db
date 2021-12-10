@@ -4,6 +4,7 @@ package com.example.objprod.controllers;
 import com.example.objprod.entities.*;
 import com.example.objprod.repos.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Optional;
 
 @Controller
@@ -28,7 +31,7 @@ public class MainController {
     private final WorkplaceRepository workplaceRepository;
     private final WorkShiftRepository workShiftRepository;
 
-//    @GetMapping("/tables")
+    //    @GetMapping("/tables")
 //     public String tables(Model model){
 //        model.addAttribute("Customers", customerRepository.findAll());
 //        model.addAttribute("DeliveryProcess", deliveryProcessRepository.findAll());
@@ -44,64 +47,88 @@ public class MainController {
 //        return "tables";
 //    }
     @GetMapping("/tables")
-    public String tables2(Model model,@RequestParam(defaultValue="test") String id,@RequestParam(defaultValue="test") String table){
+    public String tables2(Model model, @RequestParam(defaultValue = "test") String id, @RequestParam(defaultValue = "test") String table, @RequestParam(defaultValue = "test") String action) {
         model.addAttribute("Customers", customerRepository.findAll());
         model.addAttribute("DeliveryProcess", deliveryProcessRepository.findAll());
         model.addAttribute("Lens", lensRepository.findAll());
         model.addAttribute("ManufacturingProcess", manufacturingProcessRepository.findAll());
         model.addAttribute("Material", materialRepository.findAll());
-        model.addAttribute("OrderForObj",orderForObjRepository.findAll());
+        model.addAttribute("OrderForObj", orderForObjRepository.findAll());
         model.addAttribute("Users", userRepository.findAll());
         model.addAttribute("Worker", workerRepository.findAll());
         model.addAttribute("Workplace", workplaceRepository.findAll());
         model.addAttribute("Tools", toolRepository.findAll());
         model.addAttribute("WorkShift", workShiftRepository.findAll());
+        JpaRepository repository;
+        System.out.println(id + action);
         try {
             switch (table) {
                 case "Customer":
-                    model.addAttribute("ans", customerRepository.findById(Integer.parseInt(id)).orElse(new Customer()));
+                    repository = customerRepository;
                     break;
                 case "DeliveryProcess":
-                    model.addAttribute("ans", deliveryProcessRepository.findById(Integer.parseInt(id)).orElse(new DeliveryProcess()));
+                    repository = deliveryProcessRepository;
                     break;
                 case "Lens":
-                    model.addAttribute("ans", lensRepository.findById(Integer.parseInt(id)).orElse(new Lens()));
+                    repository = lensRepository;
                     break;
                 case "ManufacturingProcess":
-                    model.addAttribute("ans", manufacturingProcessRepository.findById(Integer.parseInt(id)).orElse(new ManufacturingProcess()));
+                    repository = manufacturingProcessRepository;
                     break;
                 case "Material":
-                    model.addAttribute("ans", materialRepository.findById(Integer.parseInt(id)).orElse(new Material()));
+                    repository = materialRepository;
                     break;
 
                 case "OrderForObj":
-                    model.addAttribute("ans", orderForObjRepository.findById(Integer.parseInt(id)).orElse(new OrderForObj()));
+                    repository = orderForObjRepository;
                     break;
                 case "Worker":
-                    model.addAttribute("ans", workerRepository.findById(Integer.parseInt(id)).orElse(new Worker()));
+                    repository = workerRepository;
                     break;
                 case "Workplace":
-                    model.addAttribute("ans", workplaceRepository.findById(Integer.parseInt(id)).orElse(new Workplace()));
+                    repository = workplaceRepository;
                     break;
                 case "Tools":
-                    model.addAttribute("ans", toolRepository.findById(Integer.parseInt(id)).orElse(new Tool()));
+                    repository = toolRepository;
                     break;
                 case "WorkShift":
-                    model.addAttribute("ans", workShiftRepository.findById(Integer.parseInt(id)).orElse(new WorkShift()));
+                    repository = workShiftRepository;
                     break;
-
+                default:
+                    throw new IllegalStateException("Unexpected value: " + table);
             }
-        }
-        catch (Exception e){
-            if(!(id.equals("test") && table.equals("test")))
-            model.addAttribute("ans","Такого id не существует");
+            switch (action) {
+                case "sel":
+                    System.out.println("1");
+                    model.addAttribute("ans", repository.findById(Integer.parseInt(id)));
+                    break;
+                case "del":
+                    repository.deleteById(id);
+                    model.addAttribute("ans", "запись удалена");
+                    break;
+                case "upd":
+
+//                    System.out.println(Arrays.stream(repository.findById(Integer.parseInt(id)).get().getClass().getDeclaredFields()).count());
+//                    for(Field f:repository.findById(Integer.parseInt(id)).get().getClass().getDeclaredFields()){
+//                        System.out.println(f.getName());
+//                    }
+                    model.addAttribute("fields", repository.findById(Integer.parseInt(id)).get().getClass().getDeclaredFields());
+                    model.addAttribute("ans", "запись удалена");
+                    break;
+            }
+
+//            }
+        } catch (Exception e) {
+            System.out.println("error");
+            if (!(id.equals("test") && table.equals("test")))
+                model.addAttribute("ans", "Такого id не существует");
         }
         return "tables";
+//        }
     }
     @PostMapping("/tables")
-    public String tablesR(Model model, Long id,String table){
-        System.out.println(id+" "+table);
+    public String tablesR( @RequestParam(defaultValue = "test") String id, @RequestParam(defaultValue = "test") String workplace, @RequestParam(defaultValue = "test") String type){
+        System.out.println(id+" "+workplace+" "+type);
         return "tables";
     }
-
 }
